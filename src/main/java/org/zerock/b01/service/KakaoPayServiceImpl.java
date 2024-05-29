@@ -26,7 +26,7 @@ import java.util.Optional;
 public class KakaoPayServiceImpl implements KakaoPayService {
 
     static final String cid = "TC0ONETIME"; // 가맹점 테스트용 코드
-    static final String admin_Key = "b90607a5cba3ae5145370c1d1fbfd088"; // 커밋 시 빼고 올리기 !!!
+    static final String admin_Key = ""; // 커밋 시 빼고 올리기 !!!
     private KakaoReadyResponseDTO kakaoReady;
     private final OrdersService ordersService;
     private final OrdersRepository ordersRepository;
