@@ -31,7 +31,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BoardController {
 
-    @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Value
+    @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Valuee
     private String uploadPath;
 
     private final BoardService boardService;
@@ -219,6 +219,6 @@ public class BoardController {
                 log.error(e.getMessage());
             }
 
-        }//end for
+        }//end forㄱ
     }
 }
