@@ -767,19 +767,24 @@
                     <a id="myPageLink" sec:authorize="isAuthenticated()"
                        th:href="@{/member/edit}"><span>마이 페이지</span></a>
                 </li>
-                <li class="unit"><a class="cart-ico" href="/cart"><i class="ns-cart"></i></a></li>
+                <li class="unit" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a id="adminPageLink" th:href="@{/admin/list}"><span>관리자 페이지</span></a>
+                <li class="unit"><a class="cart-ico" href="#"><i class="ns-cart"></i></a></li>
+
+                </li>
+
             </ul>
         </div>
 
     </div>
 
     <div class="top-menu-bar line-height-0">
-        <div class="logo"><a th:href="@{/}"><img th:src="@{/img/core-img/logo.png}"></a>
+        <div class="logo"><a th:href="@{/board/index}"><img th:src="@{/img/core-img/logo.png}"></a>
         </div>
         <nav class="menu-1">
             <ul class="line">
                 <li class="unit">
-                    <a href="/admin/list">상품</a>
+                    <a href="#">NEW RELEASES</a>
                     <div class="sub-menu-box">
                         <div class="sub-menu-width">
                             <ul class="line">

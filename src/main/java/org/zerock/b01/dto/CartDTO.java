@@ -1,10 +1,10 @@
 package org.zerock.b01.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
 public class CartDTO {
 
     private Long cartItemId; // 장바구니 상품 아이디

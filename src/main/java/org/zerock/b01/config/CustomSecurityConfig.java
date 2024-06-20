@@ -5,13 +5,17 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -32,11 +36,50 @@ public class CustomSecurityConfig {
 
     private final DataSource dataSource; // 데이터 소스 주입
     private final UserDetailsService userDetailsService; // 사용자 상세 정보 서비스 주입
+    private final CustomUserDetailsService customUserDetailsService; // CustomUserDetailsService 주입
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() { // BCryptPasswordEncoder 빈 생성
         return new BCryptPasswordEncoder();
     }
+    // 추가된 부분 시작: DaoAuthenticationProvider 설정
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+    // 추가된 부분 끝
+
+    @Bean
+    public InMemoryUserDetailsManager inMemoryUserDetailsManager() {
+        UserDetails admin = User.withUsername("admin")
+                .password(passwordEncoder().encode("adminPass"))
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(admin);
+    }
+
+    // InMemoryUserDetailsManager를 위한 DaoAuthenticationProvider 설정
+    @Bean
+    public DaoAuthenticationProvider inMemoryAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(inMemoryUserDetailsManager());
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    // CustomUserDetailsService를 위한 DaoAuthenticationProvider 설정
+    @Bean
+    public DaoAuthenticationProvider databaseAuthenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -75,6 +118,15 @@ public class CustomSecurityConfig {
             httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler()); // 로그인 성공 핸들러 설정
         });
 
+        // 최신 버전에 맞게 URL 패턴 권한 설정
+        http.authorizeHttpRequests(authorize -> {
+            authorize.requestMatchers("/admin/list","/admin/register").hasRole("ADMIN");
+            authorize.anyRequest().permitAll();
+        });
+
+        http.authenticationProvider(inMemoryAuthenticationProvider());
+        http.authenticationProvider(databaseAuthenticationProvider());
+
         return http.build(); // 보안 필터 체인 빌드하여 반환
     }
 
@@ -101,4 +153,5 @@ public class CustomSecurityConfig {
         repo.setDataSource(dataSource); // 데이터 소스 설정
         return repo; // 토큰 저장소 반환
     }
+
 }

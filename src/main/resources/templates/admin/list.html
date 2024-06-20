@@ -33,7 +33,7 @@
 
         .btn-outline-secondary:active {
             background-color: black; /* Black background on active */
-            border-color: black; /* Black border on active */
+            border-color: black; /* Black border on active */}
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -74,7 +74,6 @@
         }
 
 
-        }
     </style>
 </head>
 
@@ -119,6 +118,7 @@
                             <th scope="col">상품명</th>
                             <th scope="col">가격</th>
                             <th scope="col">재고</th>
+                            <th scope="col">상태</th> <!-- 추가된 부분 -->
                         </tr>
                         </thead>
                         <tbody th:with="link = ${itemPageRequestDTO.getLink()}">
@@ -132,6 +132,7 @@
                             </td>
                             <td>[[${dto.i_price}]]</td>
                             <td>[[${dto.i_stock}]]</td>
+                            <td>[[${dto.itemSellStatus}]]</td> <!-- 추가된 부분 -->
                         </tr>
                         </tbody>
                     </table>
