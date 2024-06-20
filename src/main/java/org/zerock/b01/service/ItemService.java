@@ -13,6 +13,9 @@ public interface ItemService {
     void modify(ItemDTO itemDTO);
     void remove(Long ino);
 
+    void addStock(Long ino, int quantity);
+    void removeStock(Long ino, int quantity);
+
     ItemPageResponseDTO<ItemDTO> list(ItemPageRequestDTO itemPageRequestDTO);
 
     //게시글의 이미지 처리
@@ -32,6 +35,7 @@ public interface ItemService {
                 .i_size(itemDTO.getI_size())
                 .i_price(itemDTO.getI_price())
                 .i_stock(itemDTO.getI_stock())
+                .itemSellStatus(itemDTO.getItemSellStatus()) // 추가된 부분
                 .build();
 
         if(itemDTO.getFileNames() != null){
@@ -52,6 +56,7 @@ public interface ItemService {
                 .i_size(item.getI_size())
                 .i_price(item.getI_price())
                 .i_stock(item.getI_stock())
+                .itemSellStatus(item.getItemSellStatus()) // 추가된 부분
                 .build();
 
         List<String> fileNames =

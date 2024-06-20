@@ -767,7 +767,12 @@
                     <a id="myPageLink" sec:authorize="isAuthenticated()"
                        th:href="@{/member/edit}"><span>마이 페이지</span></a>
                 </li>
+                <li class="unit" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a id="adminPageLink" th:href="@{/admin/list}"><span>관리자 페이지</span></a>
                 <li class="unit"><a class="cart-ico" href="#"><i class="ns-cart"></i></a></li>
+
+                </li>
+
             </ul>
         </div>
 
@@ -793,7 +798,7 @@
                                 <li class="unit">
                                     <a href="#">NEW FOR MEN</a>
                                     <ul>
-                                        <li><a href="#">OUTER</a></li>
+                                        <li><a href="/item/list">OUTER</a></li>
                                         <li><a href="#">TOP</a></li>
                                         <li><a href="#">BOTTOM</a></li>
                                         <li><a href="#">BAG</a></li>
