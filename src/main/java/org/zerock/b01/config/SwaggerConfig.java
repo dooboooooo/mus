@@ -12,5 +12,5 @@ public class SwaggerConfig {
         return new OpenAPI().info(new Info().title("SpringDoc SwaggerUI example")
                 .description("Test SwaggerUI application")
                 .version("v0.0.1"));
-    }
+    } //
 }
