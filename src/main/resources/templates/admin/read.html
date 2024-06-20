@@ -105,6 +105,10 @@
                         <input type="hidden" th:value="${itemDTO.i_color}" id="i_color" name="i_color">
                         <span th:text="'컬러'+${itemDTO.i_color}"></span>
                     </div>
+                    <div class="h4 text-danger text-left"> <!-- 추가된 부분 -->
+                        <input type="hidden" th:value="${itemDTO.itemSellStatus}" id="itemSellStatus" name="itemSellStatus">
+                        <span th:text="'상태: ' + ${itemDTO.itemSellStatus}"></span>
+                    </div> <!-- 추가된 부분 끝 -->
                     <div class="input-group w-50">
                         <div class="input-group-prepend">
                             <span class="input-group-text">수량</span>
@@ -197,39 +201,56 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--axios 사용-->
     <script th:src="@{/js/cart.js}"></script>
     <script>
-        $('.btn_cart').on('click', function () { //클래스이기때문에 . 사용
-            // 장바구니 버튼 클릭 시
-            debugger
+        $('.btn_cart').on('click', function () {
+            let itemId = $("#itemDTO").val();
+            let count = $("#count").val();
+            let size = $("#i_size").val();
+            let color = $("#i_color").val();
 
-            let itemId = $("#itemDTO").val();// 상품 아이디
-            let count = $("#count").val(); // 상품 수량 # = id이기 때문에
-            let size = $("#i_size").val();// 상품 사이즈
-            let color = $("#i_color").val(); // 상품 색상
+            if (count == 0) {
+                alert("상품 수량이 0입니다.");
+                return;
+            }
 
-            console.log("itemId : " + itemId);
-            console.log("count : " + count);
-            console.log("size: " + size);
-            console.log("color : " + color);
             let cartObj = {
                 itemId: itemId,
                 count: count,
                 size: size,
                 color: color
-            }
-            console.log(cartObj);
+            };
 
             cartReady(cartObj).then(result => {
                 debugger
-                if(result.cdid !== null){ // = 성공했을 때
+                if (result.cdid !== null) {
                     alert("장바구니에 담겼습니다.");
                     window.location.href = '/admin/list';
                 } else {
-                    alert("장바구니에 실패습니다.");
+                    if (result.cartErrors) {
+                        alert(result.cartErrors);
+                    } else {
+                        alert("장바구니 담기에 실패했습니다.");
+                    }
                 }
-
-            })
-
+            });
         });
     </script>
+    <!-- 로그인 모달 -->
+    <div id="loginModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">로그인 필요</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>로그인이 필요합니다. 로그인 해주세요.</p>
+                    <!-- 로그인 폼 또는 로그인 페이지로 이동하는 링크 -->
+                    <a href="/login" class="btn btn-primary">로그인 페이지로 이동</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>

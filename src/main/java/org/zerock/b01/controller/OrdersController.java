@@ -66,8 +66,6 @@ public class OrdersController {
         model.addAttribute("responseDTO", result);
     }
 
-    // 주문서에는 상품에서 정보가 넘어와서 출력이 되어야 하는데, 아직 어떻게 받을지 모르겠음 !!
-
     @PreAuthorize("permitAll()")
     @GetMapping("/detail")
     public void ordersDetail(@Param("ono") Long ono, OrdersPageRequestDTO ordersPageRequestDTO, Model model){

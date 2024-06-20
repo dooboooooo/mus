@@ -11,16 +11,14 @@ public class CartDTO {
     private String itemNm; // 상품명
     private int price; // 상품 금액
     private int count; // 수량
-    private String fileName;
-    private String uuid;
+    private String imgUrl; // 상품 이미지 경로
 
-    public CartDTO(Long cartItemId, String itemNm, int price, int count, String fileName, String uuid) {
+    public CartDTO(Long cartItemId, String itemNm, int price, int count, String imgUrl) {
         this.cartItemId = cartItemId;
         this.itemNm = itemNm;
         this.price = price;
         this.count = count;
-        this.fileName = fileName;
-        this.uuid = uuid;
+        this.imgUrl = imgUrl;
     }
 
 }

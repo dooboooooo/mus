@@ -26,11 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequestMapping({"/","/board"})
 @Log4j2
 @RequiredArgsConstructor
 public class BoardController {
 
-    @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Value
+    @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Valuee
     private String uploadPath;
 
     private final BoardService boardService;
@@ -58,6 +59,11 @@ public class BoardController {
 //
 //        model.addAttribute("responseDTO", responseDTO);
 //    }
+
+    @GetMapping({"/", "/index"})
+    public String index() {
+        return "index";
+    }
 
     @GetMapping( "/list")
     public void list(PageRequestDTO pageRequestDTO, Model model){

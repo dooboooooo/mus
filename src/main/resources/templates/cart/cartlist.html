@@ -11,34 +11,27 @@
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
     <style>
-        /* 기존의 스타일에 추가적인 세부 조정 */
-        .repImgDiv {
-            padding: 0; /* 내부 여백을 0으로 설정하여 이미지가 셀의 왼쪽 끝에 붙게 함 */
-            text-align: left; /* 이미지를 셀의 왼쪽으로 정렬 */
+        .content-mg{
+            margin-left:25%;
+            margin-right:25%;
+            margin-top:2%;
+            margin-bottom:100px;
         }
-
-        .table td {
-            padding-left: 5px; /* 셀의 왼쪽 패딩을 줄임 */
-            padding-right: 5px; /* 셀의 오른쪽 패딩을 줄임 */
-            vertical-align: top; /* 셀의 내용을 위쪽으로 정렬 */
+        .repImgDiv{
+            margin-right:15px;
+            margin-left:15px;
+            height:auto;
         }
-
-        .table {
-            width: 100%; /* 테이블 너비를 100%로 설정 */
-            margin: auto; /* 중앙 정렬 */
-            border-collapse: collapse; /* 셀 경계선 합치기 */
+        .repImg{
+            height:100px;
+            width:100px;
         }
-
-        .text-center {
-            text-align: center;
+        .fs18{
+            font-size:18px
         }
-
-        /* 추가적으로 이미지 크기 조절이 필요할 수 있음 */
-        .repImg {
-            width: 80px; /* 이미지 크기를 조절 */
-            height: auto; /* 비율 유지 */
+        .fs24{
+            font-size:24px
         }
-
     </style>
 </th:block>
 
@@ -48,9 +41,9 @@
     <div>
         <table class="table">
             <colgroup>
-                <col width="30%"/>
-                <col width="40%"/>
-                <col width="30%"/>
+                <col width="15%"/>
+                <col width="70%"/>
+                <col width="15%"/>
             </colgroup>
             <thead>
             <tr class="text-center">
@@ -68,7 +61,7 @@
                 </td>
                 <td class="d-flex">
                     <div>
-                        <img th:src="|/view/s_${cartItem.getUuid() + '_' + cartItem.getFileName()}|">
+                        <img th:src="|/view/s_${cartItem.imgUrl}|">
                     </div>
                     <div class="align-self-center">
                         <span th:text="${cartItem.itemNm}" class="fs24 font-weight-bold"></span>
@@ -138,7 +131,6 @@
         }
 
         function changeCount(obj){
-            debugger
             var count = obj.value;
             var cartItemId = obj.id.split('_')[1];
             var price = $("#price_" + cartItemId).data("price");
@@ -159,21 +151,16 @@
 
         function updateCartItemCount(cartItemId, count){
             debugger
-            // var token = $("meta[name='_csrf']").attr("content");
-            // var header = $("meta[name='_csrf_header']").attr("content");
-
-            // console.log("CSRF 토큰:", token); // 디버깅용 로그 추가
-            // console.log("CSRF 헤더:", header); // 디버깅용 로그 추가
+            if(count <= 0){
+                alert("수량을 1개 이상으로 선택해주세요.");
+                return
+            }
 
             var url = "/cartItem/" + cartItemId + "?count=" + count;
 
             $.ajax({
                 url: url,
                 type: "PATCH", // 부분 업데이트 이므로 PATCH TYPE 사용
-                // beforeSend: function(xhr){
-                //     /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                //     xhr.setRequestHeader(header, token);
-                // },
                 dataType: "json",
                 cache: false,
                 success: function(result, status){
@@ -214,27 +201,41 @@
             });
         }
 
-        function orders(){
-            debugger
+        function orders() {
             var url = "/orders/orders";
+            var cdids = [];
 
-            var cdids = $("input[name='cartChkBox']:checked").map(function() {
-                return $(this).val();
-            }).get(); // 모든 선택된 체크박스의 값을 배열로 수집
+            $("input[name=cartChkBox]:checked").each(function() {
+                var cartItemId = $(this).val();
+                cdids.push("cdids=" + encodeURIComponent(cartItemId));
+            });
 
+            // 배열을 '&'로 연결
             if (cdids.length > 0) {
-                url += "?cdids=" + cdids.join('&cdids='); // 배열의 모든 값을 쿼리 스트링에 추가
+                url += "?" + cdids.join("&");
+                window.location.href = url;
+            } else {
+                // 선택된 체크박스가 없는 경우
+                alert("구매하실 상품을 선택해주세요.");
             }
 
-            window.location.href = url; // 최종 URL로 페이지 이동
-            // var cartItemId = $(this).val();
-            // var data = {};
-            // data["cartItemId"] = cartItemId;
-            // dataList.push(data);
-
-
-
         }
+
+
+        $(document).ready(function(){
+            $("input[name=cartChkBox]").change(function(){
+                getOrderTotalPrice();
+            });
+
+            // 초기 로드 시 전체 선택 상태 확인 및 총 가격 계산
+            $("#checkall").change(function() {
+                checkAll();
+            });
+
+            // 초기 총 가격 계산
+            getOrderTotalPrice();
+        });
+
     </script>
 </th:block>
 

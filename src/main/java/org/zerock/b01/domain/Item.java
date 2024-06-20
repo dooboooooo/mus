@@ -39,6 +39,11 @@ public class Item extends BaseEntity{
     // not null
     private int i_stock; //재고보유여부
 
+    @Enumerated(EnumType.STRING)
+    private ItemSellStatus itemSellStatus; // 상품 판매 상태
+
+
+
 
     @OneToMany (mappedBy = "item",
             cascade = {CascadeType.ALL},
@@ -68,10 +73,6 @@ public class Item extends BaseEntity{
 
 
 
-    @Enumerated(EnumType.STRING)
-    private ItemSellStatus itemSellStatus; //상품 판매 상태
-
-
     public void change(String i_name, int i_price, String i_color, String i_size) {
         this.i_name = i_name;
         this.i_price = i_price;
@@ -80,6 +81,33 @@ public class Item extends BaseEntity{
 
 
     }
+
+    // 재고 감소 메서드
+    public void removeStock(int stockNumber) {
+        int restStock = this.i_stock - stockNumber;
+        if (restStock < 0) {
+            restStock = 0;
+        }
+        this.i_stock = restStock;
+        updateSellStatus();
+    }
+
+    // 재고 증가 메서드
+    public void addStock(int stockNumber) {
+        this.i_stock += stockNumber;
+        updateSellStatus();
+    }
+
+    // 재고 상태 업데이트 메서드
+    private void updateSellStatus() {
+        if (this.i_stock == 0) {
+            this.itemSellStatus = ItemSellStatus.SOLD_OUT;
+        } else {
+            this.itemSellStatus = ItemSellStatus.SELL;
+        }
+    }
+
+
 
 
 

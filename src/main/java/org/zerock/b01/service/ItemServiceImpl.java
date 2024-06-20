@@ -17,6 +17,7 @@ import org.zerock.b01.repository.ItemRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.zerock.b01.constant.ItemSellStatus;
 
 @Service
 @Log4j2
@@ -116,6 +117,20 @@ public class ItemServiceImpl implements ItemService{
     }
 
     @Override
+    public void addStock(Long ino, int quantity) {
+        Item item = itemRepository.findById(ino).orElseThrow(() -> new IllegalArgumentException("Invalid item id"));
+        item.addStock(quantity);
+        itemRepository.save(item);
+    }
+
+    @Override
+    public void removeStock(Long ino, int quantity) {
+        Item item = itemRepository.findById(ino).orElseThrow(() -> new IllegalArgumentException("Invalid item id"));
+        item.removeStock(quantity);
+        itemRepository.save(item);
+    }
+
+    @Override
     public ItemPageResponseDTO<ItemDTO> list(ItemPageRequestDTO itemPageRequestDTO) {
         String[] types = itemPageRequestDTO.getTypes();
         String keyword = itemPageRequestDTO.getKeyword();
@@ -163,6 +178,7 @@ public class ItemServiceImpl implements ItemService{
                 .i_color(item.getI_color())
                 .i_size(item.getI_size())
                 .i_stock(item.getI_stock())
+                .itemSellStatus(item.getItemSellStatus()) // 추가된 부분
                 .itemImages(item.getItemImageSet().stream().map(itemImage -> ItemImageDTO.builder()
                         .uuid(itemImage.getUuid())
                         .fileName(itemImage.getFileName())
@@ -171,5 +187,7 @@ public class ItemServiceImpl implements ItemService{
                 .build();
         return itemListAllDTO;
     }
+
+
 
 }

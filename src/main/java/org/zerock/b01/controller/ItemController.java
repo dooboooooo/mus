@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.b01.dto.*;
 import org.zerock.b01.service.ItemService;
@@ -85,6 +86,9 @@ public class ItemController {
             log.info(infoIMG);
         }
         model.addAttribute("itemDTO", itemDTO);
+        // 추가된 부분 시작
+        model.addAttribute("itemSellStatus", itemDTO.getItemSellStatus());
+        // 추가된 부분 끝
 
     }
     @PostMapping("/modify")
@@ -178,6 +182,28 @@ public class ItemController {
 
         }//end for
     }
+    @PostMapping("/addStock")
+    public String addStock(@Param("ino") Long ino, @RequestParam("quantity") int quantity, RedirectAttributes redirectAttributes) {
+        try {
+            itemService.addStock(ino, quantity);
+            redirectAttributes.addFlashAttribute("result", "addedStock");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/read?ino=" + ino;
+    }
+
+    @PostMapping("/removeStock")
+    public String removeStock(@Param("ino") Long ino, @RequestParam("quantity") int quantity, RedirectAttributes redirectAttributes) {
+        try {
+            itemService.removeStock(ino, quantity);
+            redirectAttributes.addFlashAttribute("result", "removedStock");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/admin/read?ino=" + ino;
+    }
+
 }
 
 

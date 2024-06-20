@@ -720,11 +720,7 @@
 
         <div class="header-brand unit-left">
             <ul class="row">
-                <li class="cell"><a href="#"><span>공지사항</span></a></li>
-
-                <li class="cell">
-                    <a sec:authorize="isAuthenticated()" th:href="@{/member/edit}"><span>관리자 모드</span></a>
-                </li>
+                <li class="cell"><a  th:href="@{/notice/list}"><span>공지사항</span></a></li>
             </ul>
         </div>
 
@@ -742,6 +738,8 @@
                     <a sec:authorize="isAuthenticated()"
                        th:href="@{/member/edit}"><span>마이 페이지</span></a>
                 </li>
+                <li class="unit" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a id="adminPageLink" th:href="@{/admin/list}"><span>관리자 페이지</span></a>
                 <li class="unit"><a class="cart-ico" href="/cart"><i class="ns-cart"></i></a></li>
             </ul>
         </div>
@@ -753,214 +751,16 @@
         <nav class="menu-1">
             <ul class="line">
                 <li class="unit">
-                    <a href="#">NEW RELEASES</a>
-                    <div class="sub-menu-box">
-                        <div class="sub-menu-width">
-                            <ul class="line">
-                                <li class="unit">
-                                    <a href="#">신상품 전체보기</a>
-                                    <ul>
-                                        <li><a href="#">SNKRS</a></li>
-                                        <li><a href="#">NEW TO SALE</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">NEW FOR MEN</a>
-                                    <ul>
-                                        <li><a href="#">OUTER</a></li>
-                                        <li><a href="#">TOP</a></li>
-                                        <li><a href="#">BOTTOM</a></li>
-                                        <li><a href="#">BAG</a></li>
-                                        <li><a href="#">ACC</a></li>
-                                        <li><a href="#">전체보기</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">NEW FOR WOMEN</a>
-                                    <ul>
-                                        <li><a href="#">OUTER</a></li>
-                                        <li><a href="#">DRESS</a></li>
-                                        <li><a href="#">TOP</a></li>
-                                        <li><a href="#">BOTTOM</a></li>
-                                        <li><a href="#">BAG</a></li>
-                                        <li><a href="#">ACC</a></li>
-                                        <li><a href="#">전체보기</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">NEW FOR KIDS</a>
-                                    <ul>
-                                        <li><a href="#">OUTER</a></li>
-                                        <li><a href="#">TOP</a></li>
-                                        <li><a href="#">BOTTOM</a></li>
-                                        <li><a href="#">BAG</a></li>
-                                        <li><a href="#">ACC</a></li>
-                                        <li><a href="#">전체보기</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <a href="/item/list">상품</a>
                 </li>
                 <li class="unit">
                     <a href="#">MEN</a>
-                    <div class="sub-menu-box">
-                        <div class="sub-menu-width">
-                            <ul class="line">
-                                <li class="unit">
-                                    <a href="#">GIFT BY PRICE</a>
-                                    <ul>
-                                        <li><a href="#">신상품</a></li>
-                                        <li><a href="#">SNKRS</a></li>
-                                        <li><a href="#">THE BEST</a></li>
-                                        <li><a href="#">MEMBER SHOP</a></li>
-                                        <li><a href="#">SALE</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">의류</a>
-                                    <ul>
-                                        <li><a href="#">의류 전체</a></li>
-                                        <li><a href="#">아우터웨어</a></li>
-                                        <li><a href="#">팬츠 & 타이츠</a></li>
-                                        <li><a href="#">후디 & 크루</a></li>
-                                        <li><a href="#">탑 & 티셔츠</a></li>
-                                        <li><a href="#">숏 팬츠</a></li>
-                                        <li><a href="#">가방</a></li>
-                                        <li><a href="#">양말</a></li>
-                                        <li><a href="#">모자 & 용품</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">브랜드</a>
-                                    <ul>
-                                        <li><a href="#">ADIDAS</a></li>
-                                        <li><a href="#">COVER NOT</a></li>
-                                        <li><a href="#">FILLUMINATE</a></li>
-                                        <li><a href="#">THIS IS NEVER THAT</a></li>
-                                        <li><a href="#">SALOMON</a></li>
-                                        <li><a href="#">UMBRO</a></li>
-                                        <li><a href="#">HDEX</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">it-etc!</a>
-                                    <ul>
-                                        <li><a href="#">가방</a></li>
-                                        <li><a href="#">신발</a></li>
-                                        <li><a href="#">모자</a></li>
-                                        <li><a href="#">양말/레그웨어</a></li>
-                                        <li><a href="#">안경</a></li>
-                                        <li><a href="#">액세서리</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
                 <li class="unit">
                     <a href="#">WOMEN</a>
-                    <div class="sub-menu-box">
-                        <div class="sub-menu-width">
-                            <ul class="line">
-                                <li class="unit">
-                                    <a href="#">GIFT BY PRICE</a>
-                                    <ul>
-                                        <li><a href="#">신상품</a></li>
-                                        <li><a href="#">SNKRS</a></li>
-                                        <li><a href="#">THE BEST</a></li>
-                                        <li><a href="#">MEMBER SHOP</a></li>
-                                        <li><a href="#">아이콘 클래쉬 컬렉션</a></li>
-                                        <li><a href="#">윈터 에센셜 어패럴</a></li>
-                                        <li><a href="#">SALE</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">의류</a>
-                                    <ul>
-                                        <li><a href="#">의류 전체</a></li>
-                                        <li><a href="#">아우터웨어</a></li>
-                                        <li><a href="#">팬츠 & 타이츠</a></li>
-                                        <li><a href="#">스포츠 브라</a></li>
-                                        <li><a href="#">후디 & 크루</a></li>
-                                        <li><a href="#">탑 & 티셔츠</a></li>
-                                        <li><a href="#">숏 팬츠</a></li>
-                                        <li><a href="#">스커트 & 드레스</a></li>
-                                        <li><a href="#">가방</a></li>
-                                        <li><a href="#">양말</a></li>
-                                        <li><a href="#">모자 & 용품</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">브랜드</a>
-                                    <ul>
-                                        <li><a href="#">MISCHIEF</a></li>
-                                        <li><a href="#">MATIN KIM</a></li>
-                                        <li><a href="#">URVAN DRESS</a></li>
-                                        <li><a href="#">SCULPTOR</a></li>
-                                        <li><a href="#">LEE</a></li>
-                                        <li><a href="#">ARCTERYX</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">it-etc!</a>
-                                    <ul>
-                                        <li><a href="#">가방</a></li>
-                                        <li><a href="#">신발</a></li>
-                                        <li><a href="#">모자</a></li>
-                                        <li><a href="#">양말/레그웨어</a></li>
-                                        <li><a href="#">안경</a></li>
-                                        <li><a href="#">액세서리</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
                 <li class="unit">
                     <a href="#">KIDS</a>
-                    <div class="sub-menu-box">
-                        <div class="sub-menu-width">
-                            <ul class="line">
-                                <li class="unit">
-                                    <a href="#">GIFT BY PRICE</a>
-                                    <ul>
-                                        <li><a href="#">신상품</a></li>
-                                        <li><a href="#">패밀리 룩 컬렉션</a></li>
-                                        <li><a href="#">릴 오토 컬렉션</a></li>
-                                        <li><a href="#">노비스 부츠 컬렉션</a></li>
-                                        <li><a href="#">베이비 샵</a></li>
-                                        <li><a href="#">SALE</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                    <a href="#">의류</a>
-                                    <ul>
-                                        <li><a href="#">베이비 (0-4세)</a></li>
-                                        <li><a href="#">리틀키즈 (4-7세)</a></li>
-                                        <li><a href="#">주니어 (8-13세)</a></li>
-                                        <li><a href="#">아우터웨어</a></li>
-                                        <li><a href="#">팬츠</a></li>
-                                        <li><a href="#">후디 & 크루</a></li>
-                                        <li><a href="#">탑 & 티셔츠</a></li>
-                                        <li><a href="#">트랙탑 & 세트</a></li>
-                                        <li><a href="#">가방 & 모자 & 용품</a></li>
-                                    </ul>
-                                </li>
-                                <li class="unit">
-                                <a href="#">it-etc!</a>
-                                <ul>
-                                    <li><a href="#">가방</a></li>
-                                    <li><a href="#">신발</a></li>
-                                    <li><a href="#">모자</a></li>
-                                    <li><a href="#">양말/레그웨어</a></li>
-                                    <li><a href="#">안경</a></li>
-                                    <li><a href="#">액세서리</a></li>
-                                </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </li>
             </ul>
         </nav>
@@ -1035,19 +835,17 @@
 <footer class="pcfooter">
     <div>
         <div>
-            <a href="#">로그인</a>
-            <a href="#">멤버 가입</a>
+            <a th:href="@{/member/login}">로그인</a>
+            <a th:href="@{/member/join}">멤버 가입</a>
         </div>
 
         <div>
             <p>고객센터</p>
             <ul>
                 <li><a href="#">it-cloth@naver.com</a></li>
-                <li><a href="#">주문/결제</a></li>
-                <li><a href="#">배송</a></li>
-                <li><a href="#">주문배송조회</a></li>
+                <li><a href="#">배송 조회</a></li>
                 <li><a href="#">멤버쉽 혜택/서비스</a></li>
-                <li><a href="#">공지사항</a></li>
+                <li><a  th:href="@{/member/join}">공지사항</a></li>
                 <li><a href="#">1:1 채팅 문의</a></li>
                 <li><a href="#">이용약관</a></li>
                 <li><a href="#">개인정보처리방침</a></li>

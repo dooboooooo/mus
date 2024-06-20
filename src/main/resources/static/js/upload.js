@@ -23,3 +23,9 @@ async function removeFileToServer(uuid, fileName){
 
 }
 
+async function downloadFile(fileName){
+    debugger
+    const response = await axios.get(`/download/${fileName}`)
+    return response.data
+
+}
