@@ -33,7 +33,7 @@ public class OrdersController {
     private final CartService cartService;
 
     @PreAuthorize("permitAll()")
-    @GetMapping("/orders") // 주문서
+    @GetMapping("/orders")
     // localhost/orders/orders?cdids=1&cdids=2&cdids=102 장바구니 연결 전 테스트 방식
     public void orders(Principal principal, Model model, @RequestParam("cdids") Long[] cdids) { // , Long[] cnos
         log.info("매개값 cdids : " + Arrays.toString(cdids)); // []을 출력하려면 Arrays.toString() 사용해야함
