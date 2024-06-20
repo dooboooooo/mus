@@ -49,7 +49,7 @@ public class CartService {
             cartRepository.save(cart);
         }
 
-        CartDetail savedCartItem = cartDetailRepository.findByCart_CnoAndItem_Ino(cart.getCno(), item.getIno());
+        CartDetail savedCartItem = cartDetailRepository.findCartDetail(cart.getCno(), item.getIno());
         // 현재 상품이 장바구니에 존재하는지 조회
 
         if (savedCartItem != null) { // savedCartItem이 null이 아니라면 -> 이미 장바구니에 존재하는 상품인 경우
@@ -66,17 +66,17 @@ public class CartService {
     @Transactional(readOnly = true)
     public List<CartDTO> getCartList(String mid) {
 
-        List<CartDTO> cartDTOList = new ArrayList<>();
+        List<CartDTO> cartDetailList = new ArrayList<>();
 
         Member member = memberRepository.findByMidOnly(mid);
         Cart cart = cartRepository.findByMember_Mid(member.getMid());
         // 현재 로그인한 회원의 장바구니 엔티티 조회
         if (cart == null) { // 장바구니가 비어있다면
-            return cartDTOList; // 비어있는 리스트 반환
+            return cartDetailList; // 비어있는 리스트 반환
         }
 
-        cartDTOList = cartDetailRepository.findCartDetailDtoList(cart.getCno());
-        return cartDTOList;
+        cartDetailList = cartDetailRepository.findCartDetailDtoList(cart.getCno());
+        return cartDetailList;
         // 장바구니에 담긴 상품 정보 조회하여 리턴
     }
 

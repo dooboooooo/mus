@@ -34,7 +34,7 @@ public class OrdersController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/orders") // 주문서
-    // localhost/orders/orders?cdids=1&cdids=52&cdids=102 장바구니 연결 전 테스트 방식
+    // localhost/orders/orders?cdids=1&cdids=2&cdids=102 장바구니 연결 전 테스트 방식
     public void orders(Principal principal, Model model, @RequestParam("cdids") Long[] cdids) { // , Long[] cnos
         log.info("매개값 cdids : " + Arrays.toString(cdids)); // []을 출력하려면 Arrays.toString() 사용해야함
         log.info("orders 컨트롤러 실행 ... ");
@@ -65,8 +65,6 @@ public class OrdersController {
         log.info(result);
         model.addAttribute("responseDTO", result);
     }
-
-    // 주문서에는 상품에서 정보가 넘어와서 출력이 되어야 하는데, 아직 어떻게 받을지 모르겠음 !!
 
     @PreAuthorize("permitAll()")
     @GetMapping("/detail")

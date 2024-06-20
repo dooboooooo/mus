@@ -193,6 +193,7 @@
                         } else {
                             alert("기본배송지 여부 체크박스를 해제합니다.");
                             defaultAddress.checked = false;
+                            return;
                         }
                     }
                     form.submit(); // 작성중인 배송지 저장

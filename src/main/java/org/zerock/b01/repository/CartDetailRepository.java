@@ -11,14 +11,16 @@ import java.util.List;
 
 public interface CartDetailRepository extends JpaRepository<CartDetail, Long> {
 
-    CartDetail findByCart_CnoAndItem_Ino(Long cno, Long itemId);
+    @Query("select cd from CartDetail cd where cd.cart.cno = :cno and cd.item.ino = :itemId and cd.paymentSuccess = 0")
+    CartDetail findCartDetail(Long cno, Long itemId);
 
-    @Query("select new org.zerock.b01.dto.CartDTO(ci.cdid, i.i_name, i.i_price, ci.count, im.imgUrl) " +
-            "from CartDetail ci, ItemImg im " +
+    @Query("select new org.zerock.b01.dto.CartDTO(ci.cdid, i.i_name, i.i_price, ci.count, concat(im.uuid, '_', im.fileName)) " +
+            "from CartDetail ci, ItemImage im " +
             "join ci.item i " +
             "where ci.cart.cno = :cartId " +
             "and im.item.ino = ci.item.ino " +
-            "and im.repImgYn = 'Y' " +
+            "and im.ord = 0" +
+            "and ci.paymentSuccess = 0" +
             "order by ci.regDate desc")
     /* new com.ogu.ogoods.dto.CartDetailDto
     DTO를 직접 조회하기 위해서 new를 통해 생성자를 통해 객체 반환

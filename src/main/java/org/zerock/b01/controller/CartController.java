@@ -1,15 +1,18 @@
 package org.zerock.b01.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.zerock.b01.domain.CartDetail;
 import org.zerock.b01.dto.CartDTO;
 import org.zerock.b01.dto.CartDetailDTO;
 import org.zerock.b01.service.CartService;
@@ -55,7 +58,7 @@ public class CartController {
     @GetMapping(value = "/cart")
     public String orderHist(Principal principal, Model model) {
         List<CartDTO> cartDetailList = cartService.getCartList(principal.getName());
-        model.addAttribute("cartitems", cartDetailList);
+        model.addAttribute("cartItems", cartDetailList);
         return "cart/cartList";
     }
 

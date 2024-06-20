@@ -61,7 +61,8 @@ public class BoardController {
 //    }
 
     @GetMapping({"/", "/index"})
-    public void index() {
+    public String index() {
+        return "index";
     }
 
     @GetMapping( "/list")
