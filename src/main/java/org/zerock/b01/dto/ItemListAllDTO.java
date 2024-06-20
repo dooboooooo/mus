@@ -24,7 +24,7 @@ public class ItemListAllDTO {
 
     private String i_color; //i_price 에서 변경
 
-    private String i_size; // 성은추가
+    private String i_size; // 성은추가/
 
     private int i_stock; //재고보유여부
     private ItemSellStatus itemSellStatus; // 추가된 부분
