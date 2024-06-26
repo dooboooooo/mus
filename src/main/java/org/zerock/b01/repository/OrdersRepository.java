@@ -14,7 +14,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long>, OrdersSea
     // c, r, d가 가능해야함
 
     @EntityGraph(attributePaths = {"ordersDetailSet"})
-    // @EntityGraph에는 attributePaths라는 속성을 이용해서 같이 로딩해야 하는 속성 명시
+    // @EntityGraph에는 attributePaths라는 속성을 이용해서 같이 로딩해야 하는 속성 명시함
     @Query("select o from Orders o where o.ono = :ono")
     Optional<Orders> findByIdWithOrdersDetails(Long ono);
 
