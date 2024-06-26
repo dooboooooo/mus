@@ -33,7 +33,7 @@
         <button class="modifyBtn" th:data-ano="${addressDTO.a_no}" type="button">수정</button>
         <button class="removeBtn" th:data-ano="${addressDTO.a_no}" th:if="${addressDTO.a_basic == 0}" type="button">삭제
         </button>
-        <button class="selectBtn" th:data-ano="${addressDTO.a_no}" type="button">선택(수정필요)</button>
+        <button class="selectBtn" th:data-ano="${addressDTO.a_no}" type="button">선택</button>
     </div>
     <hr>
 </div> <!-- foreach -->
@@ -111,16 +111,29 @@
             let ano = target.getAttribute("data-ano"); // 클릭된 버튼에 data-ano 속성값을 지정해둠
             let readFormAll = document.querySelectorAll('.formTag');
             debugger;
+
+            // 부모 페이지가 열려 있는지 확인
+            if (window.opener) {
+                // 부모 페이지의 getAddressSelectResult 함수를 호출하여 값을 전달
+                window.opener.getAddressSelectResult(ano);
+                window.close();
+            } else {
+                // 부모 페이지가 열려 있지 않은 경우
+                alert('부모 페이지가 없습니다.');
+            }
+
             readFormAll.forEach(function (form) {
                 debugger;
                 let readAno = $(form).find('#a_no').val();
                 if (ano !== readAno) {
                     return; // 다음 반복으로 이동
                 }
+
                 // 배송지 번호로 배송지값(addressDTO)을 가져온다.
                 readOneAddress(ano).then(result => {
                     debugger
                     console.log(result);
+
 
                     // 배송지 리스트에서 선택을 누르면 해당 값들이 부모페이지인 orders.html에 전달되어야 한다.
                     // 재선택 시 이전에 전달한 쿼리 매개변수를 제거한 새로운 URL 생성

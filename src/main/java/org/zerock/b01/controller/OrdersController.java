@@ -173,11 +173,13 @@ public class OrdersController {
 
     @PreAuthorize("permitAll()")
     @GetMapping("/success")
-    public void ordersSuccess(Principal principal, OrdersPageRequestDTO ordersPageRequestDTO) {
+    public void ordersSuccess(Principal principal, OrdersPageRequestDTO ordersPageRequestDTO, @RequestParam("oNo") Long oNo, Model model) {
         String member = principal.getName();
         OrdersPageResponseDTO<OrdersListDTO> result = ordersService.listWithAll(member, ordersPageRequestDTO);
         log.info(ordersPageRequestDTO);
         log.info(result);
+        OrdersListDTO ordersListDTO = ordersService.readOne(oNo);
+        model.addAttribute("oDTO", ordersListDTO);
         // OrdersDetail에 결제한 장바구니 세부항목 정보 번호를 저장하도록 해야겠음
     }
 

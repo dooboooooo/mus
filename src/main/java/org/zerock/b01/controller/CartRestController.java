@@ -36,12 +36,18 @@ public class CartRestController {
     @PostMapping(value = "/addCart", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> addCart(@RequestBody @Valid CartDetailDTO cartDetailDTO, BindingResult bindingResult, Principal principal) {
         log.info("addCart 메서드 실행 : " + cartDetailDTO.toString());
+        Map<String, String> resultMap = new HashMap<>();
+        if (principal == null) {
+            // 로그인 되어있지 않으면 로그인 에러 리턴
+            resultMap.put("cartErrors", "loginError");
+            return resultMap;
+        }
+
         String mid = principal.getName();
         Long cdid;
-        Map<String, String> resultMap = new HashMap<>();
 
-// @Valid CartDetailDTO cartDetailDTO가 not null인데 null 이면 에러처리해주는 코드
-        if(bindingResult.hasErrors()){
+        // @Valid CartDetailDTO cartDetailDTO가 not null인데 null 이면 에러처리해주는 코드
+        if (bindingResult.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
@@ -49,14 +55,14 @@ public class CartRestController {
                 sb.append(fieldError.getDefaultMessage());
             }
 
-            resultMap.put("cartErrors",sb.toString());
+            resultMap.put("cartErrors", sb.toString());
             return resultMap;
         }
 
         try {
             cdid = cartService.addCart(cartDetailDTO, mid);
-        } catch(Exception e){
-            resultMap.put("serviceErrors",e.getMessage());
+        } catch (Exception e) {
+            resultMap.put("serviceErrors", e.getMessage());
             return resultMap;
         }
 
@@ -65,8 +71,6 @@ public class CartRestController {
         log.info(resultMap);
         return resultMap;
     }
-
-
 
 
 }

@@ -37,7 +37,7 @@ public class DownloadController {
     @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Value
     private String uploadPath;
 
-    // 파일 다운로드 처리(파일명에 한글이 포함된 파일을 다운로드하면 콘솔에 오류는 출력되지만, 다운로드는 된다 ..
+    // 파일 다운로드 처리(파일명에 한글이 포함된 파일을 다운로드하면 콘솔에 오류는 출력되지만, 다운로드는 된다 ..)
     @GetMapping("/download/{fileName}")
     public void fileDownload(@PathVariable String fileName,
                              HttpServletResponse response) throws IOException {

@@ -169,7 +169,7 @@
                     <td>
                         <a class="o_ordersnoA" href="/orders/detail" th:data-ono="${dto.ono}">[[${dto.o_ordersno}]]</a>
                     </td>
-                    <td>[[${detailDTO.od_price}]]원<br><span>([[${detailDTO.od_count}]]개)</span></td>
+                    <td>[[${detailDTO.od_price * detailDTO.od_count}]]원<br><span>([[${detailDTO.od_count}]]개)</span></td>
                     <td>
                         <div>[[${dto.o_state}]]</div>
                     </td>

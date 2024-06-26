@@ -51,11 +51,12 @@
                             <a th:href="|@{/notice/list}?${link}|">
                                 <button type="button">List</button>
                             </a>
-                            <a th:if="${user != null && user.username == dto.n_writer}"
-                               href="#">
-                                <!--                               th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" >-->
-                                <button type="button">Modify(구현중)</button>
-                            </a>
+                            <div th:if="${user != null}">
+<!--                                <a th:if="${user.username == dto.n_writer}" href="#">-->
+<!--                                    &lt;!&ndash;                               th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" >&ndash;&gt;-->
+<!--                                    <button type="button">Modify(구현중)</button>-->
+<!--                                </a>-->
+                            </div>
                         </div>
                     </div>
 
@@ -82,22 +83,42 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--axios 사용-->
     <script th:src="@{/js/upload.js}"></script>
     <script th:inline="javascript">
-        function encodeURIComponentUTF8(str) {
-            return encodeURIComponent(str).replace(/'/g,"%27").replace(/"/g,"%22");
-        }
-
         document.querySelector("#downloadFile").addEventListener("click", function (e) {
             debugger
             const target = e.target
-            if(target.tagName !== 'BUTTON') {
+            if (target.tagName !== 'BUTTON') {
                 return
             }
 
             const fileName = target.getAttribute("data-fn")
-            downloadFile(encodeURIComponentUTF8(fileName)).then(result => {
-                debugger
-            });
+            window.location.href = '/download/' + fileName;
         })
+
+        $(document).ready(function() {
+            debugger
+            let member = [[${#authentication.principal}]]; // anonymousUser : 로그인 안한 사용자일 때
+            let writer = [[${dto.n_writer}]];
+            if(member !== "anonymousUser"){
+                if(member.username === writer){
+                    alert("내 게시물")
+                    let aTag = $('<a>', {
+                        href: '#',
+                    });
+
+                    let buttonTag = $('<button>', {
+                        text: '수정(구현중)', // 버튼 텍스트 내용 지정
+                        click: function() { // 클릭 이벤트 핸들러 지정
+                            alert('Button clicked!');
+                        }
+                    });
+                    aTag.append(buttonTag);
+                }
+                alert("로그인 했다.")
+            } else {
+                alert("로그인 안했다.")
+            }
+
+        });
 
     </script>
 </div><!-- layout fragment end -->

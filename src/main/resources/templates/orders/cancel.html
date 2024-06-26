@@ -5,17 +5,76 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Amado - Furniture Ecommerce Template | 주문 </title>
+    <title>결제취소</title>
+    <style>
+        .divTag {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60vh;
+        }
 
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .button:active {
+            background-color: #004494;
+        }
+    </style>
 </head>
 
 <div layout:fragment="content">
-    <h1>결제취소</h1>
-    <h2>사용자의 요청에 의해 결제가 취소되었습니다.</h2>
-    <div>
-        <button>장바구니이동</button> <!--장바구니로 이동하기-->
-        <button id="ordersListViewBtn">주문내역조회</button> <!--주문내역 조회 페이지 연결예정-->
+    <div class="divTag">
+        <div class="container">
+            <h1>결제취소</h1>
+            <h2>사용자의 요청에 의해 결제가 취소되었습니다.</h2>
+            <h2>다시 시도 해주세요.</h2>
+            <div>
+                <button id="cartLink" class="button">장바구니이동</button> <!--장바구니로 이동하기-->
+                <button id="ordersListViewBtn" class="button">주문내역조회</button> <!--주문내역 조회 페이지 연결예정-->
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,6 +83,10 @@
             debugger
             $("#ordersListViewBtn").on("click", function () {
                 window.location.href = "/orders/list";
+            })
+
+            $("#cartLink").on("click", function () {
+                window.location.href = "/cart";
             })
         });
     </script>

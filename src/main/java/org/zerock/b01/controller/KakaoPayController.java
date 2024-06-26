@@ -100,7 +100,7 @@ public class KakaoPayController {
 
         // 리다이렉션을 위한 RedirectView 생성
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("/orders/success"); // 리다이렉션할 URL 지정
+        redirectView.setUrl("/orders/success?oNo=" + ono); // 리다이렉션할 URL 지정
         return redirectView;
     }
 

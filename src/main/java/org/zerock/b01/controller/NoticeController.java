@@ -64,7 +64,7 @@ public class NoticeController {
         return "redirect:/notice/list";
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     @GetMapping({"/read", "/modify"})
     public void read(Long nno, PageRequestDTO pageRequestDTO, Model model){
         NoticeDTO noticeDTO = noticeService.readOne(nno);

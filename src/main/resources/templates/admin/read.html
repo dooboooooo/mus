@@ -221,14 +221,15 @@
 
             cartReady(cartObj).then(result => {
                 debugger
-                if (result.cdid !== null) {
+                if (result.cdid) {
                     alert("장바구니에 담겼습니다.");
-                    window.location.href = '/admin/list';
+                    window.location.href = '/item/list';
                 } else {
-                    if (result.cartErrors) {
-                        alert(result.cartErrors);
+                    if (result.cartErrors === 'loginError') {
+                        alert("로그인 후 이용해주세요.");
+                        window.location.href = '/member/login';
                     } else {
-                        alert("장바구니 담기에 실패했습니다.");
+                        alert("[오류] 다시 시도 해주세요.")
                     }
                 }
             });

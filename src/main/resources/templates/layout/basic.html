@@ -735,12 +735,18 @@
                     <a href="/member/logout" sec:authorize="isAuthenticated()"><span>로그아웃</span></a>
                 </li>
                 <li class="unit">
-                    <a sec:authorize="isAuthenticated()"
+                    <a sec:authorize="hasRole('ROLE_USER')"
                        th:href="@{/member/edit}"><span>마이 페이지</span></a>
                 </li>
                 <li class="unit" sec:authorize="hasRole('ROLE_ADMIN')">
                     <a id="adminPageLink" th:href="@{/admin/list}"><span>관리자 페이지</span></a>
-                <li class="unit"><a class="cart-ico" href="/cart"><i class="ns-cart"></i></a></li>
+                </li>
+                <li class="unit" sec:authorize="hasRole('ROLE_USER')">
+                    <a th:href="@{/orders/list}"><span>주문내역</span></a>
+                </li>
+                <li class="unit" sec:authorize="hasRole('ROLE_USER')">
+                    <a class="cart-ico" href="/cart"><i class="ns-cart"></i></a>
+                </li>
             </ul>
         </div>
     </div>

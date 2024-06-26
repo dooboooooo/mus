@@ -6,112 +6,79 @@
 
 <head>
     <!-- Title  -->
-    <title>Amado - Furniture Ecommerce Template | 주문 </title>
+    <title>주문완료!</title>
 
     <!-- Core Style CSS -->
     <!--    <link rel="stylesheet" th:href="@{/css/core-style.css}">-->
     <style>
-        .addressDiv {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .addressDiv h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-
-        .addressDiv_DivAddress {
-            margin-bottom: 15px;
-        }
-
-        .addressDiv_DivAddress label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .addressDiv_DivAddress_Div {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .divTag {
+            font-family: Arial, sans-serif;
             background-color: #f9f9f9;
-        }
-
-        /* 상품 정보 테이블 스타일 */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table th, table td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-        }
-
-        /* 결제 정보 입력 폼 스타일 */
-        #payment_info_area ul {
-            list-style: none;
             margin: 0;
             padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
             margin-bottom: 20px;
         }
 
-        #payment_info_area li {
+        h2 {
+            color: #666;
+            font-size: 1.2em;
             margin-bottom: 10px;
         }
 
-        #payment_info_area label {
-            margin-right: 10px;
+        .buttons {
+            margin-top: 30px;
         }
 
-        #btn_pay {
-            display: inline-block;
-            padding: 10px 20px;
+        .button {
             background-color: #007bff;
             color: #fff;
-            text-decoration: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
             border-radius: 5px;
-            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 5px;
             transition: background-color 0.3s ease;
         }
 
-        #btn_pay:hover {
+        .button:hover {
             background-color: #0056b3;
         }
 
-        .payment-options {
-            list-style-type: none;
-            display: flex;
-            padding: 0;
-        }
-
-        .payment-option {
-            margin-right: 10px;
-        }
-
-        .payment-option label {
-            border: 1px solid #ccc;
-            padding: 10px;
-            cursor: pointer;
+        .button:active {
+            background-color: #004494;
         }
     </style>
 </head>
 
 <div layout:fragment="content">
-    <h1>주문 완료 !</h1>
-    <h2 id="member"></h2>
-    <h2>자세한 정보는 주문 상세 내역에서 조회 가능합니다.</h2>
-    <div>
-        <button>계속 쇼핑하기</button> <!--상품리스트로 연결예정-->
-        <button id="ordersListViewBtn">주문내역조회</button> <!--주문내역 조회 페이지 연결예정-->
+    <div class="divTag">
+        <div class="container">
+            <h1>주문 완료 !</h1>
+            <h2 id="member"></h2>
+            <h2>주문번호 : <a id="ordersDetail" href="#"></a></h2>
+            <div class="buttons">
+                <button id="itemLink" class="button">계속 쇼핑하기</button>
+                <button id="ordersListViewBtn" class="button">주문내역 목록</button>
+            </div>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -125,6 +92,15 @@
             $("#ordersListViewBtn").on("click", function () {
                 window.location.href = "/orders/list";
             })
+
+            $("#itemLink").on("click", function () {
+                window.location.href = "/item/list";
+            })
+
+            let oDTO = [[${oDTO}]]; // OrdersListDTO
+            let ordersDetailLink = $("#ordersDetail");
+            ordersDetailLink.text(oDTO.o_ordersno);
+            ordersDetailLink.prop('href', '/orders/detail?ono=' + oDTO.ono);
         });
     </script>
 </div>
