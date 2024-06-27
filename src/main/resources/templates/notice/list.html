@@ -20,21 +20,26 @@
         }
 
         form {
-            margin-bottom: 20px;
-            margin-top: 20px;
+            margin-bottom: 10px;
+            margin-top: 60px;
+            display: flex;
+            gap: 5px;
         }
+
 
         input[type="hidden"],
         select,
         input[type="text"],
         .searchBtn,
-        .clearBtn {
+        .clearBtn,
+        .regBtn {
             margin-bottom: 10px;
             padding: 5px;
         }
 
         .searchBtn,
-        .clearBtn {
+        .clearBtn,
+        .regBtn {
             background-color: #000;
             color: #fff;
             cursor: pointer;
@@ -88,6 +93,12 @@
             color: #fff;
         }
 
+        .regBtnDIV {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+        }
     </style>
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
 </head>
@@ -109,6 +120,9 @@
             <input type="text" name="keyword" th:value="${pageRequestDTO.keyword}">
             <button class="searchBtn" type="submit">Search</button>
             <button class="clearBtn" type="button">Clear</button>
+            <div class="regBtnDIV" th:if="${#authentication.principal != 'anonymousUser'}">
+                <button class="regBtn" type="button">글쓰기</button>
+            </div>
         </form>
 
         <table>
@@ -125,7 +139,7 @@
                 <td>[[${dto.nno}]]</td>
                 <td>
                     <a th:href="|@{/notice/read(nno =${dto.nno})}&${link}|"> [[${dto.n_title}]]
-                    <span th:if="${dto.noticeImages != null && dto.noticeImages.size() > 0}">
+                        <span th:if="${dto.noticeImages != null && dto.noticeImages.size() > 0}">
                         <i class="fa-solid fa-paperclip" style="color: #000000;"></i>
                     </span>
                     </a>
@@ -164,7 +178,7 @@
 
         const target = e.target
 
-        if(target.tagName !== 'A') {
+        if (target.tagName !== 'A') {
             return
         }
 
@@ -176,15 +190,24 @@
 
         formObj.submit();
 
-    },false)
+    }, false)
 
-    document.querySelector(".clearBtn").addEventListener("click", function (e){
+    document.querySelector(".clearBtn").addEventListener("click", function (e) {
         e.preventDefault()
         e.stopPropagation()
 
-        self.location ='/notice/list'
+        self.location = '/notice/list'
 
-    },false)
+    }, false)
+
+    document.querySelector(".regBtn").addEventListener("click", function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        self.location = '/notice/register'
+
+    }, false)
+
 
 
 

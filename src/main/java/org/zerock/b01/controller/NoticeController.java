@@ -20,6 +20,7 @@ import org.zerock.b01.service.NoticeService;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,6 @@ public class NoticeController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/register")
     public void registerGET(){
-
     }
 
     @PostMapping("/register")

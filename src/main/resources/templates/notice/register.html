@@ -18,22 +18,22 @@
                 <div>
                     <form action="/notice/register" method="post">
                         <div>
-                            <span>Title</span>
+                            <span>제목</span>
                             <input name="n_title" placeholder="Title" type="text">
                         </div>
 
                         <div>
-                            <span>Content</span>
+                            <span>내용</span>
                             <textarea name="n_content" rows="5"></textarea>
                         </div>
 
                         <div th:with="username=${#authentication.principal.username}">
-                            <span>Writer</span>
+                            <span>작성자</span>
                             <input name="n_writer" placeholder="writer" th:value="${username}" readonly>
                         </div>
 
                         <div>
-                            <span>Images</span>
+                            <span>첨부파일</span>
                             <div class="uploadResult" style="flex-wrap: wrap;">
                                 <!--첨부파일 미리보기 img-->
                             </div>
@@ -44,7 +44,7 @@
 
                         <div>
                             <div>
-                                <button class="submitBtn" type="submit">Submit</button>
+                                <button class="submitBtn" type="submit">작성완료</button>
                                 <button type="reset">Reset</button>
                             </div>
                         </div>
@@ -112,7 +112,8 @@
                         </div>
                     </div>`
                 uploadResult.innerHTML += str
-            } else {
+            }
+            else {
                 str = `<div class="fileDIV">
                         <div>
                             ${fileName}

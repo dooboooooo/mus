@@ -6,116 +6,226 @@
 
 <head>
     <title>공지사항</title>
+    <style>
+        .div {
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+        }
+
+        .content-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .content-body div {
+            margin-bottom: 15px;
+        }
+
+        .content-body span, .file-container span {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .content-body input, .content-body textarea {
+            width: calc(100% - 120px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .content-body textarea {
+            resize: none;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            background-color: #333333;
+            color: white;
+            cursor: pointer;
+            width: 75px;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #000;
+        }
+
+        .file-container {
+            margin-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .file-container > span {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        #file {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #file > div {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .file-container img {
+            max-width: 100px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .file-container button {
+            padding: 5px 10px;
+            font-size: 12px;
+            border: none;
+            background-color: #6c757d;
+            color: white;
+            cursor: pointer;
+        }
+
+        .file-container button:hover {
+            background-color: #5a6268;
+        }
+
+    </style>
 </head>
 
 <div layout:fragment="content">
-    <div>
-        <div>
-            <div>
+    <div class="div">
+        <div class="content-container">
+            <div class="content-header">
+                <h1>공지사항 상세보기</h1>
+            </div>
+            <div class="content-body">
                 <div>
-                    <h1>공지사항 상세보기</h1>
+                    <span>번호</span>
+                    <input type="text" th:value="${dto.nno}" readonly>
                 </div>
                 <div>
-                    <div>
-                        <span>번호</span>
-                        <input type="text" th:value="${dto.nno}" readonly>
-                    </div>
-                    <div>
-                        <span>제목</span>
-                        <input type="text" th:value="${dto.n_title}" readonly>
-                    </div>
-
-                    <div>
-                        <span>내용</span>
-                        <textarea rows="5" readonly>[[${dto.n_content}]]</textarea>
-                    </div>
-
-                    <div>
-                        <span>작성자</span>
-                        <input type="text" th:value="${dto.n_writer}" readonly>
-                    </div>
-
-                    <div>
-                        <span>작성일</span>
-                        <input type="text"
-                               th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
-                    </div>
-                    <div>
-                        <span>수정일</span>
-                        <input type="text"
-                               th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
-                    </div>
-
-                    <div th:with="user=${#authentication.principal}">
-                        <div th:with="link = ${pageRequestDTO.getLink()}">
-                            <a th:href="|@{/notice/list}?${link}|">
-                                <button type="button">List</button>
-                            </a>
-                            <div th:if="${user != null}">
-<!--                                <a th:if="${user.username == dto.n_writer}" href="#">-->
-<!--                                    &lt;!&ndash;                               th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" >&ndash;&gt;-->
-<!--                                    <button type="button">Modify(구현중)</button>-->
-<!--                                </a>-->
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!--end card body-->
-
+                    <span>제목</span>
+                    <input type="text" th:value="${dto.n_title}" readonly>
+                </div>
                 <div>
-                    <span>첨부파일</span>
-                    <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
-                        <div th:each="fileName: ${dto.fileNames}">
-                            <span>[[${fileName}]]</span>
-                            <img th:src="|/view/${fileName}|">
-                            <button id="downloadFile" type="button" th:data-fn="${fileName}">다운로드</button>
-                        </div>
+                    <span>내용</span>
+                    <textarea rows="5" readonly>[[${dto.n_content}]]</textarea>
+                </div>
+                <div>
+                    <span>작성자</span>
+                    <input type="text" th:value="${dto.n_writer}" readonly>
+                </div>
+                <div>
+                    <span>작성일</span>
+                    <input type="text"
+                           th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                </div>
+                <div>
+                    <span>수정일</span>
+                    <input type="text"
+                           th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                </div>
+            </div>
+
+            <div th:with="user=${#authentication.principal}">
+                <div th:with="link = ${pageRequestDTO.getLink()}">
+                    <div class="button-container">
+                        <a th:href="|@{/notice/list}?${link}|">
+                            <button type="button">List</button>
+                        </a>
+                        <!--수정 버튼 출력 위치-->
                     </div>
+                </div>
+            </div>
 
-                </div><!--end card-->
-            </div><!-- end col-->
-        </div><!-- end row-->
-
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <div class="file-container">
+                <span>첨부파일</span>
+                <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}" id="file">
+                    <div th:each="fileName: ${dto.fileNames}">
+                        <span th:text="${fileName.split('_')[1]}"></span>
+                        <th:block th:if="${#strings.endsWith(fileName, 'JPG') or #strings.endsWith(fileName, 'PNG')}"> <!--끝자리가 jpg 또는 png 인지 확인-->
+                            <img th:src="@{/view/{fileName}(fileName=${fileName})}">
+                        </th:block>
+                        <button class="downloadFile" type="button" th:data-fn="${fileName}">다운로드</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!--axios 사용-->
     <script th:src="@{/js/upload.js}"></script>
     <script th:inline="javascript">
-        document.querySelector("#downloadFile").addEventListener("click", function (e) {
-            debugger
-            const target = e.target
-            if (target.tagName !== 'BUTTON') {
-                return
-            }
+        document.querySelectorAll(".downloadFile").forEach(function (element) {
+            element.addEventListener("click", function (e) {
+                debugger;
+                const target = e.target;
+                if (target.tagName !== 'BUTTON') {
+                    return;
+                }
 
-            const fileName = target.getAttribute("data-fn")
-            window.location.href = '/download/' + fileName;
-        })
+                const fileName = target.getAttribute("data-fn");
+                window.location.href = '/download/' + fileName;
+            });
+        });
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             debugger
             let member = [[${#authentication.principal}]]; // anonymousUser : 로그인 안한 사용자일 때
             let writer = [[${dto.n_writer}]];
-            if(member !== "anonymousUser"){
-                if(member.username === writer){
-                    alert("내 게시물")
+            let btnContainer = $('.button-container');
+            if (member !== "anonymousUser") {
+                if (member.username === writer) {
                     let aTag = $('<a>', {
-                        href: '#',
+                        href: '#', // /notice/modify?게시물번호=게시물번호
                     });
 
                     let buttonTag = $('<button>', {
-                        text: '수정(구현중)', // 버튼 텍스트 내용 지정
-                        click: function() { // 클릭 이벤트 핸들러 지정
-                            alert('Button clicked!');
-                        }
+                        text: '수정', // 버튼 텍스트 내용 지정
+                        type: 'button'
                     });
                     aTag.append(buttonTag);
+                    btnContainer.append(aTag);
                 }
-                alert("로그인 했다.")
-            } else {
-                alert("로그인 안했다.")
             }
 
         });
