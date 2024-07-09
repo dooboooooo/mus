@@ -5,55 +5,170 @@
 
 <head>
     <title>공지사항 작성</title>
+    <style>
+        .div {
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
 
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+        }
+
+        .content-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .content-body div {
+            margin-bottom: 15px;
+        }
+
+        .content-body span, .file-container span {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .content-body input, .content-body textarea {
+            width: calc(100% - 120px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .content-body textarea {
+            resize: none;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            background-color: #333333;
+            color: white;
+            cursor: pointer;
+            width: 75px;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #000;
+        }
+
+        .file-container {
+            margin-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .file-container > span {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .uploadResult {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .uploadResult > div {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .file-container img {
+            max-width: 100px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .file-container button {
+            padding: 5px 10px;
+            font-size: 12px;
+            border: none;
+            background-color: #6c757d;
+            color: white;
+            cursor: pointer;
+        }
+
+        .file-container button:hover {
+            background-color: #5a6268;
+        }
+
+    </style>
 </head>
 
 <div layout:fragment="content">
-    <div>
-        <div>
-            <div>
-                <div>
-                    <h1>공지사항 작성</h1>
-                </div>
-                <div>
-                    <form action="/notice/register" method="post">
-                        <div>
-                            <span>제목</span>
-                            <input name="n_title" placeholder="Title" type="text">
+    <div class="div">
+        <div class="content-container">
+            <div class="content-header">
+                <h1>공지사항 작성</h1>
+            </div>
+            <div class="content-body">
+                <form action="/notice/register" method="post">
+                    <div>
+                        <span>제목</span>
+                        <input name="n_title" placeholder="제목을 입력하세요." type="text">
+                    </div>
+
+                    <div>
+                        <span>내용</span>
+                        <textarea name="n_content" placeholder="내용을 입력하세요." rows="5"></textarea>
+                    </div>
+
+                    <div th:with="username=${#authentication.principal.username}">
+                        <span>작성자</span>
+                        <input name="n_writer" placeholder="writer" th:value="${username}" readonly>
+                    </div>
+
+                    <div class="file-container">
+                        <span>첨부파일</span>
+                        <div class="uploadHidden">
+                            <input multiple name="files" type="file" style="width: 100%">
                         </div>
-
-                        <div>
-                            <span>내용</span>
-                            <textarea name="n_content" rows="5"></textarea>
+                        <div class="uploadResult" style="flex-wrap: wrap;">
+                            <!--첨부파일 미리보기 img-->
                         </div>
+                    </div>
 
-                        <div th:with="username=${#authentication.principal.username}">
-                            <span>작성자</span>
-                            <input name="n_writer" placeholder="writer" th:value="${username}" readonly>
+                    <div>
+                        <div class="button-container">
+                            <button class="submitBtn" type="submit">완료</button>
+                            <button type="reset">Reset</button>
                         </div>
-
-                        <div>
-                            <span>첨부파일</span>
-                            <div class="uploadResult" style="flex-wrap: wrap;">
-                                <!--첨부파일 미리보기 img-->
-                            </div>
-                            <div class="uploadHidden">
-                                <input multiple name="files" type="file">
-                            </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <button class="submitBtn" type="submit">작성완료</button>
-                                <button type="reset">Reset</button>
-                            </div>
-                        </div>
-
-
-                    </form>
-                </div><!--end card body-->
-
-            </div><!--end card-->
+                    </div>
+                </form>
+            </div><!--end card body-->
         </div><!-- end col-->
     </div><!-- end row-->
 
@@ -105,19 +220,18 @@
                 str = `<div class="fileDIV">
                         <div>
                             ${fileName}
-                            <button onclick="javascript:removeFile('${uuid}', '${fileName}', this)" >X</button>
+                            <button onclick="removeFile('${uuid}', '${fileName}', this, event)">X</button>
                         </div>
                         <div>
                              <img src="/view/${link}" data-file="${uuid + "_" + fileName}" >
                         </div>
                     </div>`
                 uploadResult.innerHTML += str
-            }
-            else {
+            } else {
                 str = `<div class="fileDIV">
                         <div>
                             ${fileName}
-                            <button onclick="javascript:removeFile('${uuid}', '${fileName}', this)" >X</button>
+                            <button onclick="removeFile('${uuid}', '${fileName}', this, event)">X</button>
                         </div>
                         <div>
                             <img th:src="@{/img/file-img/fileIMG.jpg}" data-file="${uuid + '_' + fileName}">
@@ -128,15 +242,27 @@
 
         }
 
-        function removeFile(uuid, fileName, obj) {
+        function removeFile(uuid, fileName, obj, event) {
+            debugger
+            event.preventDefault(); // 위의 x 버튼의 type이 지정되어 있지 않아 자동으로 submit 되었다 !! 기존 이벤트 방지하는 이 줄의 코드를 넣어 기존 동작을 막고 다음 코드들을 진행하게 함으로 오류 해결 ...
+            event.stopPropagation(); // 이벤트가 상위요소인 form 태그로 전달되는것을 방지한다.
             console.log(uuid)
             console.log(fileName)
             console.log(obj)
 
             const targetDiv = obj.closest(".fileDIV")
+            console.log(targetDiv)
 
             removeFileToServer(uuid, fileName).then(data => {
-                targetDiv.remove()
+                debugger
+                console.log(data.result);
+                if (data.result === "removed") {
+                    debugger
+                    alert("지워짐")
+                    targetDiv.remove()
+                } else {
+                    alert("오류")
+                }
             })
         }
 

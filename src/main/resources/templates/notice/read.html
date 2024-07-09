@@ -180,7 +180,7 @@
                 <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}" id="file">
                     <div th:each="fileName: ${dto.fileNames}">
                         <span th:text="${fileName.split('_')[1]}"></span>
-                        <th:block th:if="${#strings.endsWith(fileName, 'JPG') or #strings.endsWith(fileName, 'PNG')}"> <!--끝자리가 jpg 또는 png 인지 확인-->
+                        <th:block th:if="${#strings.endsWith(fileName, 'jpg') or #strings.endsWith(fileName, 'PNG')}"> <!--끝자리가 jpg 또는 png 인지 확인-->
                             <img th:src="@{/view/{fileName}(fileName=${fileName})}">
                         </th:block>
                         <button class="downloadFile" type="button" th:data-fn="${fileName}">다운로드</button>

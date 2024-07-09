@@ -10,5 +10,6 @@ import java.util.List;
 public class UploadFileDTO {
 
     private List<MultipartFile> files;
+
 }
 

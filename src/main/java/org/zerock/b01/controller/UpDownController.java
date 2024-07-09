@@ -1,6 +1,5 @@
 package org.zerock.b01.controller;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -113,17 +112,20 @@ public class UpDownController {
 
     @Operation(summary = "DELETE 방식으로 파일 삭제")
     @DeleteMapping("/remove/{fileName}")
-    public Map<String,Boolean> removeFile(@PathVariable String fileName){
+    public Map<String,String> removeFile(@PathVariable String fileName){
 
         Resource resource = new FileSystemResource(uploadPath+File.separator + fileName);
         String resourceName = resource.getFilename();
 
-        Map<String, Boolean> resultMap = new HashMap<>();
-        boolean removed = false;
+        Map<String, String> resultMap = new HashMap<>();
+        String removed = null;
 
         try {
             String contentType = Files.probeContentType(resource.getFile().toPath());
-            removed = resource.getFile().delete();
+            if(resource.getFile().delete()){
+                // 파일 삭제 성공 시 removed에 removed 저장
+                removed = "removed";
+            }
 
             //섬네일이 존재한다면
             if(contentType.startsWith("image")){
