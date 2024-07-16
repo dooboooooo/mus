@@ -180,7 +180,6 @@ public class OrdersController {
         log.info(result);
         OrdersListDTO ordersListDTO = ordersService.readOne(oNo);
         model.addAttribute("oDTO", ordersListDTO);
-        // OrdersDetail에 결제한 장바구니 세부항목 정보 번호를 저장하도록 해야겠음
     }
 
     @PreAuthorize("permitAll()")
