@@ -110,7 +110,6 @@
         .file-container img {
             max-width: 100px;
             margin-right: 10px;
-            border: 1px solid #ddd;
         }
 
         .file-container button {
@@ -138,7 +137,7 @@
             <div class="content-body">
                 <div>
                     <span>번호</span>
-                    <input type="text" th:value="${dto.nno}" readonly>
+                    <input id="nno" type="text" th:value="${dto.nno}" readonly>
                 </div>
                 <div>
                     <span>제목</span>
@@ -175,13 +174,16 @@
                 </div>
             </div>
 
-            <div class="file-container">
+            <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}" class="file-container">
                 <span>첨부파일</span>
-                <div th:if="${dto.fileNames != null && dto.fileNames.size() > 0}" id="file">
+                <div id="file">
                     <div th:each="fileName: ${dto.fileNames}">
                         <span th:text="${fileName.split('_')[1]}"></span>
-                        <th:block th:if="${#strings.endsWith(fileName, 'jpg') or #strings.endsWith(fileName, 'PNG')}"> <!--끝자리가 jpg 또는 png 인지 확인-->
+                        <th:block th:if="${#strings.endsWith(#strings.toLowerCase(fileName), 'jpg') or #strings.endsWith(#strings.toLowerCase(fileName), 'png')}"> <!--끝자리를 소문자로 변경했을 때 jpg 또는 png인지 확인-->
                             <img th:src="@{/view/{fileName}(fileName=${fileName})}">
+                        </th:block>
+                        <th:block th:if="${!#strings.endsWith(#strings.toLowerCase(fileName), 'jpg') and !#strings.endsWith(#strings.toLowerCase(fileName), 'png')}"> <!--끝자리를 소문자로 변경했을 때 jpg 또는 png인지 확인-->
+                            <img th:src="@{/img/noticeIMG/fileIMG.png}">
                         </th:block>
                         <button class="downloadFile" type="button" th:data-fn="${fileName}">다운로드</button>
                     </div>
@@ -213,10 +215,11 @@
             let member = [[${#authentication.principal}]]; // anonymousUser : 로그인 안한 사용자일 때
             let writer = [[${dto.n_writer}]];
             let btnContainer = $('.button-container');
+            let nno = [[${dto.nno}]];
             if (member !== "anonymousUser") {
                 if (member.username === writer) {
                     let aTag = $('<a>', {
-                        href: '#', // /notice/modify?게시물번호=게시물번호
+                        href: '/notice/modify?nno=' + nno, // /notice/modify?nno=게시물번호
                     });
 
                     let buttonTag = $('<button>', {

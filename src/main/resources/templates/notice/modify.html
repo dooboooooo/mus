@@ -3,295 +3,341 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/basic.html}">
 
+
 <head>
-    <title>Board Modify</title>
+    <title>공지사항 수정</title>
+    <style>
+        .div {
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .content-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+        }
+
+        .content-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .content-body div {
+            margin-bottom: 15px;
+        }
+
+        .content-body span, .file-container span {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .content-body input, .content-body textarea {
+            width: calc(100% - 120px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .content-body textarea {
+            resize: none;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            border: none;
+            background-color: #333333;
+            color: white;
+            cursor: pointer;
+            width: 75px;
+            height: 40px;
+            margin-left: 10px;
+        }
+
+        .button-container button:hover {
+            background-color: #000;
+        }
+
+        .file-container {
+            margin-top: 20px;
+            border-top: 2px solid #ddd;
+        }
+
+        .file-container > span {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .uploadResult {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .uploadResult > div {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .file-container img {
+            max-width: 100px;
+            margin-right: 10px;
+        }
+
+        .file-container button {
+            padding: 5px 10px;
+            font-size: 12px;
+            border: none;
+            background-color: #6c757d;
+            color: white;
+            cursor: pointer;
+        }
+
+        .file-container button:hover {
+            background-color: #5a6268;
+        }
+
+    </style>
 </head>
 
 <div layout:fragment="content">
-    <div class="row mt-3">
-        <div class="col">
-            <div class="card">
-                <div class="card-header">
-                    Board Modify
-                </div>
-                <div class="card-body">
-                    <form th:action="@{/board/modify}" method="post" id="f1">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Bno</span>
-                            <input type="text" class="form-control" th:value="${dto.bno}" name="bno" readonly>
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Title</span>
-                            <input type="text" class="form-control" name="title" th:value="${dto.title}">
-                        </div>
+    <div class="div">
+        <div class="content-container">
+            <div class="content-header">
+                <h1>공지사항 수정</h1>
+            </div>
+            <div class="content-body">
+                <form id="form" th:action="@{/notice/modify}" method="post">
+                    <div>
+                        <span>번호</span>
+                        <input type="text" th:value="${dto.nno}" name="nno" readonly>
+                    </div>
+                    <div>
+                        <span>제목</span>
+                        <input name="n_title" th:value="${dto.n_title}" type="text">
+                    </div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Content</span>
-                            <textarea class="form-control col-sm-5" rows="5" name="content">[[${dto.content}]]</textarea>
+                    <div>
+                        <span>내용</span>
+                        <textarea name="n_content" rows="5">[[${dto.n_content}]]</textarea>
+                    </div>
+                    <div>
+                        <span>작성자</span>
+                        <input type="text" name="n_writer" th:value="${dto.n_writer}" readonly>
+                    </div>
+                    <div>
+                        <span>작성일</span>
+                        <input type="text"
+                               th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                    </div>
+                    <div>
+                        <span>수정일</span>
+                        <input type="text"
+                               th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
+                    </div>
+                    <div>
+                        <div class="button-container">
+                            <button class="ListBtn" type="button">List</button>
+                            <button class="modifyBtn" type="submit">수정</button>
+                            <button class="removeBtn" type="button">삭제</button>
                         </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Writer</span>
-                            <input type="text" class="form-control" th:value="${dto.writer}" name="writer" readonly>
+                    </div>
+                    <div class="file-container">
+                        <span>첨부파일</span>
+                        <small style="color: #666666; margin-bottom: 5px;">첨부파일 선택 시 업로드에 시간이 2 ~ 3초 소요됩니다.</small>
+                        <small style="color: #666666; margin-bottom: 5px;">첨부파일 이름에 특수문자는 포함할 수 없습니다.</small>
+                        <div class="uploadHidden">
+                            <input multiple name="files" type="file" style="width: 100%">
                         </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Images</span>
-                            <div class="float-end uploadHidden">
-                                <button type="button" class="btn btn-primary uploadFileBtn">ADD Files</button>
-                            </div>
+                        <div class="uploadResult" style="flex-wrap: wrap;">
+                            <th:block th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
+                                <div th:each="fileName: ${dto.fileNames}" class="fileDIV">
+                                    <span th:text="${fileName.split('_')[1]}"></span>
+                                    <th:block
+                                            th:if="${#strings.endsWith(#strings.toLowerCase(fileName), 'jpg') or #strings.endsWith(#strings.toLowerCase(fileName), 'png')}">
+                                        <!--끝자리를 소문자로 변경했을 때 jpg 또는 png인지 확인-->
+                                        <img th:src="@{/view/{fileName}(fileName=${fileName})}"
+                                             th:data-file="${fileName}">
+                                    </th:block>
+                                    <th:block
+                                            th:if="${!#strings.endsWith(#strings.toLowerCase(fileName), 'jpg') and !#strings.endsWith(#strings.toLowerCase(fileName), 'png')}">
+                                        <img th:src="@{/img/noticeIMG/fileIMG.png}" th:data-file="${fileName}">
+                                    </th:block>
+                                    <button type="button" class="fileRemoveBtn">X</button>
+                                </div>
+                            </th:block>
                         </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">RegDate</span>
-                            <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
-                        </div>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">ModDate</span>
-                            <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy-MM-dd HH:mm:ss')}" readonly>
-                        </div>
-
-                        <div class="my-4">
-                            <div class="float-end">
-                                <button type="button" class="btn btn-primary listBtn">List</button>
-                                <button type="button" class="btn btn-secondary modBtn">Modify</button>
-                                <button type="button" class="btn btn-danger removeBtn">Remove</button>
-                            </div>
-                        </div>
-                    </form>
-
-
-                </div><!--end card body-->
-            </div><!--end card-->
+                    </div>
+                </form>
+            </div><!--end card body-->
         </div><!-- end col-->
     </div><!-- end row-->
 
-    <!—- 첨부 파일 섬네일을 보여줄 부분 -->
-    <div class="row mt-3">
-        <div class="col ">
-            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
-                <th:block th:each="fileName:${dto.fileNames}">
-                    <div class="card col-4" th:with = "arr = ${fileName.split('_')}">
-                        <div class="card-header d-flex justify-content-center">
-                            [[${arr[1]}]]
-                            <button class="btn-sm btn-danger"
-                                    th:onclick="removeFile([[${arr[0]}]], [[${arr[1]}]], this)">X</button>
-                        </div>
-                        <div class="card-body">
-                            <img th:src="|/view/s_${fileName}|" th:data-src="${fileName}" >
-                        </div>
-                    </div><!-- card -->
-                </th:block>
-            </div>
-        </div>
-    </div>
-
-    <!—- 첨부파일 추가를 위한 모달창 -->
-    <div class="modal uploadModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Upload File</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="input-group mb-3">
-                        <input type="file" name="files" class="form-control" multiple >
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary uploadBtn">Upload</button>
-                    <button type="button" class="btn btn-outline-dark closeUploadBtn" >Close</button>
-                </div>
-            </div>
-        </div>
-    </div><!-- register modal -->
-
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
     <script src="/js/upload.js"></script>
-
-</div><!--end layout fragement-->
-
-<script layout:fragment="script" th:inline="javascript">
-
-
-    const errors = [[${errors}]]
-    console.log(errors)
-
-    let errorMsg = ''
-
-    if(errors){
-        for (let i = 0; i < errors.length; i++) {
-            errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
-        }
-        history.replaceState({}, null, null)
-        alert(errorMsg)
-    }
-
-    const link = [[${pageRequestDTO.getLink()}]]
-    const formObj = document.querySelector("#f1")
-
-    document.querySelector(".modBtn").addEventListener("click", function(e){
-        e.preventDefault()
-        e.stopPropagation()
-
-        formObj.action = `/board/modify?${link}`
-
-        //첨부파일 추가
-        appendFileData()
-
-        //삭제대상 파일들의 삭제
-        callRemoveFiles()
-
-        formObj.method ='post'
-        formObj.submit()
-
-
-    }, false)
-
-    function appendFileData(){
-
-        const target = document.querySelector(".uploadHidden")
-        const uploadFiles = uploadResult.querySelectorAll("img")
-
-        let str = ''
-
-        for (let i = 0; i < uploadFiles.length ; i++) {
-            const uploadFile = uploadFiles[i]
-            const imgLink = uploadFile.getAttribute("data-src")
-
-            str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+    <script th:inline="javascript">
+        // 에러 출력
+        const errors = [[${errors}]]
+        console.log(errors)
+        let errorMsg = ''
+        if (errors) {
+            for (let i = 0; i < errors.length; i++) {
+                errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+            }
+            history.replaceState({}, null, null)
+            alert(errorMsg)
         }
 
-        target.innerHTML = str;
+        // 첨부파일 삭제
+        function fileAddeventListener() {
+            const removeButtons = document.querySelectorAll('.fileRemoveBtn');
+            removeButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    debugger
+                    event.preventDefault()
 
-    }
+                    if (!confirm("파일을 삭제하시겠습니까?")) {
+                        return
+                    }
 
-    function appendNotShownData(){
-
-        if(removeFileList.length == 0){
-            return
+                    let fileDiv = button.closest('.fileDIV');
+                    let imgElement = fileDiv.querySelector('img');
+                    console.log(fileDiv)
+                    console.log(imgElement)
+                    if (imgElement) {
+                        let fileName = imgElement.getAttribute('data-file');
+                        console.log(fileName)
+                        removeFileToServerModify(fileName).then(data => {
+                            debugger
+                            console.log(data.result);
+                            if (data.result === "removed") {
+                                debugger
+                                alert("지워짐")
+                                fileDiv.remove()
+                            } else {
+                                alert("오류")
+                            }
+                        })
+                    }
+                });
+            });
         }
 
-        const target = document.querySelector(".uploadHidden")
-        let str = ''
+        fileAddeventListener();
 
-        for (let i = 0; i < removeFileList.length ; i++) {
+        const link = [[${pageRequestDTO.getLink()}]]
+        const formObj = document.querySelector("#form")
+        const uploadResult = document.querySelector(".uploadResult")
 
-            const {uuid, fileName} = removeFileList[i];
+        function fileSend(){
+            const uploadHidden = document.querySelector(".uploadHidden")
+            const uploadFiles = uploadResult.querySelectorAll("img")
+            let str = ''
+            for (let i = 0; i < uploadFiles.length; i++) {
+                const uploadFile = uploadFiles[i]
+                const imgLink = uploadFile.getAttribute("data-file")
+                str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+            }
 
-            str += `<input type='hidden' name='fileNames' value="${uuid}_${fileName}">`
-        }
-        target.innerHTML += str;
-    }
-
-    function callRemoveFiles(){
-
-        removeFileList.forEach( ({uuid,fileName}) => {
-            removeFileToServer({uuid, fileName})
-        })
-    }
-
-
-    document.querySelector(".removeBtn").addEventListener("click", function(e){
-        e.preventDefault()
-        e.stopPropagation()
-
-        //화면에 보이는 파일들을 form태그에 추가
-        appendFileData()
-        //화면에서 안보이도록 처리된 파일들을 form태그에 추가
-        appendNotShownData()
-
-        formObj.action = `/board/remove`
-        formObj.method ='post'
-        formObj.submit()
-    }, false)
-
-    document.querySelector(".listBtn").addEventListener("click", function(e){
-        e.preventDefault()
-        e.stopPropagation()
-
-        formObj.reset()
-        self.location =`/board/list?${link}`
-
-    }, false)
-
-    //최종적으로 삭제될 파일들의 목록
-    const removeFileList = []
-
-    function removeFile(uuid,fileName, obj){
-
-        if(!confirm("파일을 삭제하시겠습니까?")){
-            return
+            uploadHidden.innerHTML = str;
         }
 
-        console.log(uuid)
-        console.log(fileName)
+        document.querySelector(".modifyBtn").addEventListener("click", function (e) {
+            debugger
+            e.preventDefault()
+            e.stopPropagation()
+            fileSend()
+            formObj.action = `/notice/modify?${link}`
+            formObj.method = 'post'
+            formObj.submit()
+        }, false)
 
-        console.log(obj)
+        document.querySelector(".ListBtn").addEventListener("click", function (e) {
+            formObj.reset();
+            window.location.href = "/notice/list"
+        }, false)
 
-        removeFileList.push({uuid,fileName})
-
-        const targetDiv = obj.closest(".card")
-        targetDiv.remove()
-    }
-
-
-    //업로드 모달
-    const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
-
-    document.querySelector(".uploadFileBtn").addEventListener("click", function(e){
-
-        e.stopPropagation()
-        e.preventDefault()
-        uploadModal.show()
-
-    }, false)
-
-    document.querySelector(".uploadBtn").addEventListener("click", function(e){
-
-        const formObj = new FormData();
+        document.querySelector(".removeBtn").addEventListener("click", function (e) {
+            e.preventDefault() // 폼 제출 방지
+            fileSend()
+            formObj.action = `/notice/remove`
+            formObj.method = 'post'
+            formObj.submit()
+        }, false)
 
         const fileInput = document.querySelector("input[name='files']")
+        fileInput.addEventListener("change", function (e) {
+            debugger
+            const formObj = new FormData();
+            console.log(fileInput.files)
+            const files = fileInput.files
+            for (let i = 0; i < files.length; i++) {
+                formObj.append("files", files[i]);
+            }
 
-        console.log(fileInput.files)
+            uploadToServer(formObj).then(result => {
+                console.log(result)
+                for (const uploadResult of result) {
+                    showUploadFile(uploadResult)
+                }
+                fileAddeventListener();
+            }).catch(e => {
+            })
 
-        const files = fileInput.files
+        }, false)
 
-        for (let i = 0; i < files.length; i++) {
-            formObj.append("files", files[i]);
+        function showUploadFile({uuid, fileName, link}) {
+            const fileExtension = fileName.split('.').pop().toLowerCase(); // 확장자
+            const imageExtensions = ['jpg', 'jpeg', 'png', 'gif']; // 이미지 확장자들
+            let str = '';
+            // 파일이 이미지인 경우에만 추가
+            if (fileName && imageExtensions.includes(fileExtension)) {
+                // 파일이름이 존재하고 && 이미지 확장자들에 현재 파일 확장자가 존재한다면(이미지라면)
+                str = `<div class="fileDIV">
+                            ${fileName}
+                            <img src="/view/${link}" data-file="${uuid + "_" + fileName}" style="margin-left: 5px;">
+                            <button type="button" class="fileRemoveBtn">X</button>
+                       </div>`
+                uploadResult.innerHTML += str
+            } else {
+                str = `<div class="fileDIV">
+                            ${fileName}
+                            <img src="/img/noticeIMG/fileIMG.png" data-file="${uuid + '_' + fileName}">
+                            <button type="button" class="fileRemoveBtn">X</button>
+                        </div>`
+                uploadResult.innerHTML += str
+            }
         }
 
+    </script>
 
-        uploadToServer(formObj).then(result => {
-            console.log(result)
-            //console.log(result)
-            for (const uploadResult of result) {
-                showUploadFile(uploadResult)
-            }
-            uploadModal.hide()
-        }).catch(e => {
-            uploadModal.hide()
-        })
-
-    },false)
-
-    const uploadResult = document.querySelector(".uploadResult")
-
-    function showUploadFile({uuid, fileName, link}){
-
-        const str =`<div class="card col-4">
-            <div class="card-header d-flex justify-content-center">
-                ${fileName}
-                <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}', '${fileName}', this)" >X</button>
-            </div>
-            <div class="card-body">
-                 <img src="/view/${link}" data-src="${uuid+"_"+fileName}" >
-            </div>
-        </div><!-- card -->`
-
-        uploadResult.innerHTML += str
-    }
-
-</script>
+</div><!--end layout fragement-->
