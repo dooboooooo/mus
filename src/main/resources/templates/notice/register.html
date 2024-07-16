@@ -109,7 +109,6 @@
         .file-container img {
             max-width: 100px;
             margin-right: 10px;
-            border: 1px solid #ddd;
         }
 
         .file-container button {
@@ -153,6 +152,8 @@
 
                     <div class="file-container">
                         <span>첨부파일</span>
+                        <small style="color: #666666; margin-bottom: 5px;">첨부파일 선택 시 업로드에 시간이 2 ~ 3초 소요됩니다.</small>
+                        <small style="color: #666666; margin-bottom: 5px;">첨부파일 이름에 특수문자는 포함할 수 없습니다.</small>
                         <div class="uploadHidden">
                             <input multiple name="files" type="file" style="width: 100%">
                         </div>
@@ -163,8 +164,9 @@
 
                     <div>
                         <div class="button-container">
-                            <button class="submitBtn" type="submit">완료</button>
+                            <button class="ListBtn" type="button">List</button>
                             <button type="reset">Reset</button>
+                            <button class="submitBtn" type="submit">작성</button>
                         </div>
                     </div>
                 </form>
@@ -177,7 +179,7 @@
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     <script th:inline="javascript">
         // const auth = [[${#authentication.principal}]]
-
+        debugger
         const errors = [[${errors}]]
         console.log(errors)
         let errorMsg = ''
@@ -185,6 +187,7 @@
             for (let i = 0; i < errors.length; i++) {
                 errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
             }
+            history.replaceState({}, null, null)
             alert(errorMsg)
         }
 
@@ -218,24 +221,16 @@
             if (fileName && imageExtensions.includes(fileExtension)) {
                 // 파일이름이 존재하고 && 이미지 확장자들에 현재 파일 확장자가 존재한다면(이미지라면)
                 str = `<div class="fileDIV">
-                        <div>
                             ${fileName}
+                            <img src="/view/${link}" data-file="${uuid + "_" + fileName}" style="margin-left: 5px;">
                             <button onclick="removeFile('${uuid}', '${fileName}', this, event)">X</button>
-                        </div>
-                        <div>
-                             <img src="/view/${link}" data-file="${uuid + "_" + fileName}" >
-                        </div>
                     </div>`
                 uploadResult.innerHTML += str
             } else {
                 str = `<div class="fileDIV">
-                        <div>
                             ${fileName}
+                            <img src="/img/noticeIMG/fileIMG.png" data-file="${uuid + '_' + fileName}">
                             <button onclick="removeFile('${uuid}', '${fileName}', this, event)">X</button>
-                        </div>
-                        <div>
-                            <img th:src="@{/img/file-img/fileIMG.jpg}" data-file="${uuid + '_' + fileName}">
-                        </div>
                     </div>`
                 uploadResult.innerHTML += str
             }
@@ -249,6 +244,10 @@
             console.log(uuid)
             console.log(fileName)
             console.log(obj)
+
+            if (!confirm("파일을 삭제하시겠습니까?")) {
+                return
+            }
 
             const targetDiv = obj.closest(".fileDIV")
             console.log(targetDiv)
@@ -265,6 +264,13 @@
                 }
             })
         }
+
+        document.querySelector(".ListBtn").addEventListener("click", function (e) {
+            const formObj = document.querySelector("form")
+            formObj.reset();
+            window.location.href = "/notice/list"
+        }, false)
+
 
         document.querySelector(".submitBtn").addEventListener("click", function (e) {
             debugger

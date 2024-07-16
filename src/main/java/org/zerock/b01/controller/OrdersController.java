@@ -166,7 +166,7 @@ public class OrdersController {
         log.info(addressDTO);
         Long a_no = addressDTO.getA_no();
         AddressDTO readAddressDTO = addressService.readOne(a_no);
-        log.info("읽어온 addressDTO : " + readAddressDTO); // a_use가 0으로 뜸 ...
+        log.info("읽어온 addressDTO : " + readAddressDTO);
         redirectAttributes.addAttribute("addressDTO", readAddressDTO);
         return null; // 값을 가지고 주문서로 이동 !
     }

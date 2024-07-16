@@ -45,6 +45,7 @@ public class NoticeController {
     public void registerGET(){
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/register")
     public String registerPost(@Valid NoticeDTO noticeDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
         log.info("notice POST register....... :" + noticeDTO);
@@ -65,12 +66,26 @@ public class NoticeController {
     }
 
     @PreAuthorize("permitAll()")
-    @GetMapping({"/read", "/modify"})
+    @GetMapping({"/read"})
     public void read(Long nno, PageRequestDTO pageRequestDTO, Model model){
         NoticeDTO noticeDTO = noticeService.readOne(nno);
         log.info("=============================== nno : " + nno);
         log.info(noticeDTO);
         model.addAttribute("dto", noticeDTO);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping({"/modify"})
+    public String modifyGet(Long nno, PageRequestDTO pageRequestDTO, Model model, Principal principal){
+        NoticeDTO noticeDTO = noticeService.readOne(nno);
+        String writer = noticeDTO.getN_writer();
+        log.info("=============================== nno : " + nno);
+        log.info(noticeDTO);
+        if(principal.getName().equals(writer)){
+            model.addAttribute("dto", noticeDTO);
+            return "/notice/modify";
+        }
+        return "/member/login";
     }
 
     @PreAuthorize("principal.username == #noticeDTO.n_writer")

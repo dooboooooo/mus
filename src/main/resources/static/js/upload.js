@@ -26,3 +26,14 @@ async function removeFileToServer(uuid, fileName) {
 
 }
 
+async function removeFileToServerModify(fileName) {
+    debugger
+    try {
+        const response = await axios.delete(`/remove/${fileName}`)
+        return response.data
+    } catch (error) {
+        alert("에러 : " + error.response ? error.response.data : error.message);
+    }
+
+}
+
